@@ -77,6 +77,7 @@
 #include "ParallelAlgorithms/DiscontinuousGalerkin/InitializeMortars.hpp"
 #include "ParallelAlgorithms/Events/ObserveErrorNorms.hpp"
 #include "ParallelAlgorithms/Events/ObserveFields.hpp"
+#include "ParallelAlgorithms/Events/ObserveStrahlkorper.hpp"
 #include "ParallelAlgorithms/EventsAndTriggers/Actions/RunEventsAndTriggers.hpp"
 #include "ParallelAlgorithms/EventsAndTriggers/Event.hpp"
 #include "ParallelAlgorithms/EventsAndTriggers/EventsAndTriggers.hpp"
@@ -233,9 +234,9 @@ struct EvolutionMetavars {
                                                 analytic_solution_fields>,
       dg::Events::Registrars::ObserveFields<
           volume_dim, Tags::Time, observe_fields, analytic_solution_fields>,
-      Events::Registrars::ChangeSlabSize<slab_choosers>>,
+      Events::Registrars::ChangeSlabSize<slab_choosers>,
       dg::Events::Registrars::ObserveStrahlkorper<Tags::Time,
-                                                analytic_solution_fields>;
+                                                analytic_solution_fields>>;
   using triggers = Triggers::time_triggers;
 
   // Events include the observation events and finding the horizon
