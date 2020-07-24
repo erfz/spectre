@@ -37,20 +37,20 @@ struct Inertial;
 
 namespace dg {
 namespace Events {
-template <typename ObservationValueTag, typename Tensors,
+template <typename ObservationValueTag, typename RadiusTag, typename Tensors,
           typename EventRegistrars>
 class ObserveStrahlkorper;
 
 namespace Registrars {
-template <typename ObservationValueTag, typename Tensors>
+template <typename ObservationValueTag, typename RadiusTag, typename Tensors>
 using ObserveStrahlkorper =
     ::Registration::Registrar<Events::ObserveStrahlkorper, ObservationValueTag,
-                              Tensors>;
+                              RadiusTag, Tensors>;
 }  // namespace Registrars
 
-template <typename ObservationValueTag, typename Tensors,
-          typename EventRegistrars = tmpl::list<
-              Registrars::ObserveStrahlkorper<ObservationValueTag, Tensors>>>
+template <typename ObservationValueTag, typename RadiusTag, typename Tensors,
+          typename EventRegistrars = tmpl::list<Registrars::ObserveStrahlkorper<
+              ObservationValueTag, RadiusTag, Tensors>>>
 class ObserveStrahlkorper;  // IWYU pragma: keep
 
 /*!
@@ -70,10 +70,11 @@ class ObserveStrahlkorper;  // IWYU pragma: keep
  * triggered at a given observation value.  Causing multiple events to run at
  * once will produce unpredictable results.
  */
-template <typename ObservationValueTag, typename... Tensors,
+template <typename ObservationValueTag, typename RadiusTag, typename... Tensors,
           typename EventRegistrars>
-class ObserveStrahlkorper<ObservationValueTag, tmpl::list<Tensors...>,
-                        EventRegistrars> : public Event<EventRegistrars> {
+class ObserveStrahlkorper<ObservationValueTag, RadiusTag,
+                          tmpl::list<Tensors...>, EventRegistrars>
+    : public Event<EventRegistrars> {
  private:
   template <typename Tag>
   struct LocalSquareError {
@@ -116,13 +117,14 @@ class ObserveStrahlkorper<ObservationValueTag, tmpl::list<Tensors...>,
   using observed_reduction_data_tags =
       observers::make_reduction_data_tags<tmpl::list<ReductionData>>;
 
-  using argument_tags =
-      tmpl::list<ObservationValueTag, Tensors..., ::Tags::Analytic<Tensors>...>;
+  using argument_tags = tmpl::list<ObservationValueTag, RadiusTag, Tensors...,
+                                   ::Tags::Analytic<Tensors>...>;
 
   template <typename Metavariables, typename ArrayIndex,
             typename ParallelComponent>
   void operator()(
       const typename ObservationValueTag::type& observation_value,
+      const typename RadiusTag::type& radius,
       const typename Tensors::type&... tensors,
       const typename ::Tags::Analytic<Tensors>::type&... analytic_tensors,
       Parallel::ConstGlobalCache<Metavariables>& cache,
@@ -167,10 +169,11 @@ class ObserveStrahlkorper<ObservationValueTag, tmpl::list<Tensors...>,
 };
 
 /// \cond
-template <typename ObservationValueTag, typename... Tensors,
+template <typename ObservationValueTag, typename RadiusTag, typename... Tensors,
           typename EventRegistrars>
-PUP::able::PUP_ID ObserveStrahlkorper<ObservationValueTag, tmpl::list<Tensors...>,
-                                    EventRegistrars>::my_PUP_ID = 0;  // NOLINT
+PUP::able::PUP_ID
+    ObserveStrahlkorper<ObservationValueTag, RadiusTag, tmpl::list<Tensors...>,
+                        EventRegistrars>::my_PUP_ID = 0;  // NOLINT
 /// \endcond
 }  // namespace Events
 }  // namespace dg

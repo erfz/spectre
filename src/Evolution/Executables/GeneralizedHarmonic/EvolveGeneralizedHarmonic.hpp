@@ -235,7 +235,7 @@ struct EvolutionMetavars {
       dg::Events::Registrars::ObserveFields<
           volume_dim, Tags::Time, observe_fields, analytic_solution_fields>,
       Events::Registrars::ChangeSlabSize<slab_choosers>,
-      dg::Events::Registrars::ObserveStrahlkorper<Tags::Time,
+      dg::Events::Registrars::ObserveStrahlkorper<Tags::Time, Tags::TimeStep,
                                                 analytic_solution_fields>>;
   using triggers = Triggers::time_triggers;
 
