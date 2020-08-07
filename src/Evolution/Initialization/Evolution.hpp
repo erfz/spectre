@@ -169,6 +169,52 @@ struct TimeAndTimeStep {
   }
 };
 
+template <typename Metavariables>
+struct TestInitAction {
+  using initialization_tags =
+      tmpl::list<Tags::InitialTime>;
+
+  template <
+      typename DbTagsList, typename... InboxTags, typename ArrayIndex,
+      typename ActionList, typename ParallelComponent,
+      Requires<tmpl::list_contains_v<
+                   typename db::DataBox<DbTagsList>::simple_item_tags,
+                   Initialization::Tags::InitialTime>> = nullptr>
+  static auto apply(db::DataBox<DbTagsList>& box,
+                    const tuples::TaggedTuple<InboxTags...>& /*inboxes*/,
+                    const Parallel::ConstGlobalCache<Metavariables>& cache,
+                    const ArrayIndex& /*array_index*/, ActionList /*meta*/,
+                    const ParallelComponent* const /*meta*/) noexcept {
+    const double initial_time_value = db::get<Tags::InitialTime>(box);
+
+    using compute_tags = db::AddComputeTags<::Tags::SubstepTimeCompute>;
+
+    return std::make_tuple(
+        merge_into_databox<TestInitAction,
+                           db::AddSimpleTags<::Tags::TestInitTag>,
+                           compute_tags>(
+            std::move(box), 777.77));
+  }
+
+  template <
+      typename DbTagsList, typename... InboxTags, typename ArrayIndex,
+      typename ActionList, typename ParallelComponent,
+      Requires<
+          not(tmpl::list_contains_v<
+                  typename db::DataBox<DbTagsList>::simple_item_tags,
+                  Initialization::Tags::InitialTime>)> = nullptr>
+  static std::tuple<db::DataBox<DbTagsList>&&> apply(
+      db::DataBox<DbTagsList>& /*box*/,
+      const tuples::TaggedTuple<InboxTags...>& /*inboxes*/,
+      const Parallel::ConstGlobalCache<Metavariables>& /*cache*/,
+      const ArrayIndex& /*array_index*/, ActionList /*meta*/,
+      const ParallelComponent* const /*meta*/) noexcept {
+    ERROR(
+        "Could not find dependency 'Initialization::Tags::InitialTime' in "
+        "DataBox.");
+  }
+};
+
 /// \ingroup InitializationGroup
 /// \brief Initialize time-stepper items
 ///

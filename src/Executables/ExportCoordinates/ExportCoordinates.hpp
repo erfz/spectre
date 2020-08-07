@@ -144,6 +144,7 @@ struct Metavariables {
                   Metavariables::Phase::Initialization,
                   tmpl::list<
                       Initialization::Actions::TimeAndTimeStep<Metavariables>,
+                      Initialization::Actions::TestInitAction<Metavariables>,
                       evolution::dg::Initialization::Domain<Dim>,
                       ::Initialization::Actions::
                           RemoveOptionsAndTerminatePhase>>,

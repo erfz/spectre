@@ -75,6 +75,10 @@ struct Time : db::SimpleTag {
   using type = double;
 };
 
+struct TestInitTag : db::SimpleTag {
+  using type = double;
+};
+
 /// \ingroup DataBoxTagsGroup
 /// \ingroup TimeGroup
 /// Tag for the TimeStepper history
