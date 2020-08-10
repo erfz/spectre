@@ -16,7 +16,10 @@
 #include "Evolution/DiscontinuousGalerkin/DgElementArray.hpp"
 #include "Evolution/Initialization/DgDomain.hpp"
 #include "Evolution/Initialization/Evolution.hpp"
+// Strahlkorper imports for testing
 #include "Evolution/Initialization/Strahlkorper.hpp"
+#include "ApparentHorizons/Tags.hpp"
+// end Strahlkorper imports
 #include "IO/Observer/Actions.hpp"
 #include "IO/Observer/ArrayComponentId.hpp"
 #include "IO/Observer/Helpers.hpp"
@@ -73,7 +76,7 @@ struct ExportCoordinates {
       const ParallelComponent* const /*meta*/) {
     const double time = get<Tags::Time>(box);
 
-    const double test_tag_val = get<Tags::TestInitTag>(box);
+    const double test_tag_val = get<StrahlkorperTags::TestInitTag>(box);
     Parallel::printf("test_tag_val: %f\n", test_tag_val);
 
     const auto& mesh = get<domain::Tags::Mesh<Dim>>(box);
