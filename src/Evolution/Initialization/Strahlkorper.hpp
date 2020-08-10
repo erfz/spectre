@@ -12,6 +12,7 @@
 #include "DataStructures/DataBox/Prefixes.hpp"
 #include "DataStructures/Variables.hpp"
 #include "Domain/Tags.hpp"
+#include "ApparentHorizons/Tags.hpp"
 #include "Evolution/Initialization/Tags.hpp"
 #include "NumericalAlgorithms/LinearOperators/Divergence.tpp"
 #include "NumericalAlgorithms/LinearOperators/PartialDerivatives.hpp"
@@ -50,9 +51,9 @@ struct TestInitAction {
 
     return std::make_tuple(
         merge_into_databox<TestInitAction,
-                           db::AddSimpleTags<::Tags::TestInitTag>,
+                           db::AddSimpleTags<StrahlkorperTags::TestInitTag>,
                            compute_tags>(
-            std::move(box), 666.66));
+            std::move(box), 735608));
   }
 
   template <

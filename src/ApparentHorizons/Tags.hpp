@@ -37,6 +37,11 @@ struct FastFlow : db::SimpleTag {
 /// Holds tags and ComputeItems associated with a `::Strahlkorper`.
 namespace StrahlkorperTags {
 
+/// Temporary test tag
+struct TestInitTag : db::SimpleTag {
+  using type = double;
+};
+
 /// Tag referring to a `::Strahlkorper`
 template <typename Frame>
 struct Strahlkorper : db::SimpleTag {
