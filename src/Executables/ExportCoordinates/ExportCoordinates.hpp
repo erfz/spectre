@@ -74,7 +74,7 @@ struct ExportCoordinates {
     const double time = get<Tags::Time>(box);
 
     const double test_tag_val = get<Tags::TestInitTag>(box);
-    Parallel::printf("test_tag_val: %f", test_tag_val);
+    Parallel::printf("test_tag_val: %f\n", test_tag_val);
 
     const auto& mesh = get<domain::Tags::Mesh<Dim>>(box);
     const auto& inertial_coordinates =

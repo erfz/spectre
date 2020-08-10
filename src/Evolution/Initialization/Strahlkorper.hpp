@@ -52,7 +52,7 @@ struct TestInitAction {
         merge_into_databox<TestInitAction,
                            db::AddSimpleTags<::Tags::TestInitTag>,
                            compute_tags>(
-            std::move(box), 777.77));
+            std::move(box), 666.66));
   }
 
   template <
