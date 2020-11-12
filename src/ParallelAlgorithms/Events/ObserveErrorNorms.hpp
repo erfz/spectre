@@ -8,6 +8,7 @@
 #include <string>
 #include <utility>
 #include <vector>
+#include <optional>
 
 #include "DataStructures/DataBox/Prefixes.hpp"
 #include "DataStructures/DataBox/TagName.hpp"
@@ -166,7 +167,7 @@ class ObserveErrorNorms<ObservationValueTag, tmpl::list<Tensors...>,
         observers::ArrayComponentId{
             std::add_pointer_t<ParallelComponent>{nullptr},
             Parallel::ArrayIndex<ArrayIndex>(array_index)},
-        subfile_path_,
+        std::optional<std::string>{subfile_path_},
         std::vector<std::string>{db::tag_name<ObservationValueTag>(),
                                  "NumberOfPoints",
                                  ("Error(" + db::tag_name<Tensors>() + ")")...},
