@@ -9,6 +9,7 @@
 #include <unordered_map>
 #include <utility>
 #include <vector>
+#include <optional>
 
 #include "DataStructures/DataBox/DataBox.hpp"
 #include "ErrorHandling/Assert.hpp"
@@ -86,7 +87,7 @@ struct ContributeReductionData {
                     const ArrayIndex& array_index,
                     const observers::ObservationId& observation_id,
                     const ArrayComponentId& sender_array_id,
-                    const std::string& subfile_name,
+                    const std::optional<std::string>& subfile_name,
                     const std::vector<std::string>& reduction_names,
                     Parallel::ReductionData<Ts...>&& reduction_data) noexcept {
     if constexpr (tmpl::list_contains_v<DbTagsList,
@@ -198,7 +199,7 @@ struct CollectReductionDataOnNode {
                     const gsl::not_null<Parallel::NodeLock*> node_lock,
                     const observers::ObservationId& observation_id,
                     ArrayComponentId observer_group_id,
-                    const std::string& subfile_name,
+                    const std::optional<std::string>& subfile_name,
                     std::vector<std::string>&& reduction_names,
                     Parallel::ReductionData<ReductionDatums...>&&
                         received_reduction_data) noexcept {
@@ -410,7 +411,7 @@ struct WriteReductionData {
                     const gsl::not_null<Parallel::NodeLock*> node_lock,
                     const observers::ObservationId& observation_id,
                     const size_t sender_node_number,
-                    const std::string& subfile_name,
+                    const std::optional<std::string>& subfile_name,
                     std::vector<std::string>&& reduction_names,
                     Parallel::ReductionData<ReductionDatums...>&&
                         received_reduction_data) noexcept {
@@ -562,7 +563,7 @@ struct WriteReductionData {
         // NOLINTNEXTLINE(bugprone-use-after-move)
         received_reduction_data.finalize();
         WriteReductionData::write_data(
-            subfile_name,
+            *subfile_name,
             // NOLINTNEXTLINE(bugprone-use-after-move)
             std::move(reduction_names),
             std::move(received_reduction_data.data()),
