@@ -14,6 +14,7 @@ spectre_target_sources(
   TimeDerivative.cpp
   UpwindPenaltyCorrection.cpp
   VolumeTermsInstantiation.cpp
+  EnergyDensity.cpp
   )
 
 spectre_target_headers(
@@ -29,6 +30,7 @@ spectre_target_headers(
   TagsDeclarations.hpp
   TimeDerivative.hpp
   UpwindPenaltyCorrection.hpp
+  EnergyDensity.hpp
   )
 
 target_link_libraries(
